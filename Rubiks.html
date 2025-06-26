@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rubik's Cube Visualizer</title>
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .cube {
+      display: grid;
+      grid-template-columns: repeat(12, 40px);
+      grid-template-rows: repeat(9, 40px);
+      gap: 2px;
+    }
+    .sticker {
+      width: 40px;
+      height: 40px;
+      background: gray;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Rubik's Cube</h1>
+  <div class="cube" id="cube"></div>
+  <div>
+    <button onclick="rotate('U&#39;')">U'</button>
+    <button onclick="rotate('R&#39;')">R'</button>
+    <button onclick="rotate('U&#39;')">U&#39;</button>
+    <button onclick="rotate('R&#39;')">R&#39;</button>
+
+    <button onclick="scramble()">Scramble</button>
+  </div>
+
+  <script>
+    const cubeElement = document.getElementById('cube');
+    const faces = ['U', 'R', 'F', 'D', 'L', 'B'];
+    const colors = { U: 'white', R: 'red', F: 'green', D: 'yellow', L: 'orange', B: 'blue' };
+    let cube = [];
+
+    function initCube() {
+      cube = [];
+      faces.forEach(face => {
+        for (let i = 0; i < 9; i++) {
+          cube.push({ face, color: colors[face] });
+        }
+      });
+    }
+
+    function renderCube() {
+      cubeElement.innerHTML = '';
+      const layout = [
+        ...Array(3 * 12).fill(null), // Row 0-2 (top padding)
+        ...Array(3).fill(null), // left padding for U
+        ...cube.slice(0, 9), // U
+        ...Array(3 * 8).fill(null),
+
+        ...cube.slice(36, 45), // L
+        ...cube.slice(9, 18), // F
+        ...cube.slice(18, 27), // R
+        ...cube.slice(45, 54), // B
+
+        ...Array(3 * 12).fill(null), // D (bottom padding)
+        ...Array(3).fill(null),
+        ...cube.slice(27, 36), // D
+        ...Array(3 * 8).fill(null)
+      ];
+
+      layout.forEach(cell => {
+        const div = document.createElement('div');
+        div.className = 'sticker';
+        if (cell) div.style.background = cell.color;
+        cubeElement.appendChild(div);
+      });
+    }
+
+    function rotate(face) {
+      alert('Rotation logic not implemented yet for ' + face);
+      // Future: Update cube array and re-render
+      renderCube();
+    }
+
+    function scramble() {
+      const moves = ['U', "U'", 'R', "R'", 'F', "F'", 'L', "L'", 'B', "B'", 'D', "D'"];
+      for (let i = 0; i < 20; i++) {
+        const move = moves[Math.floor(Math.random() * moves.length)];
+        rotate(move);
+      }
+    }
+
+    initCube();
+    renderCube();
+    
+
+
+document.getElementById('uBtn').addEventListener('click', () => rotate('U'));
+document.getElementById('upBtn').addEventListener('click', () => rotate("U'"));
+
+
+  </script>
+</body>
+</html>
